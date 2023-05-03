@@ -31,7 +31,7 @@ run:
 
 # taget: down - Stop the project
 down:
-	${DOCKER_COMPOSE} -f ${DOCKER_ENVIRONMENT} down
+	${DOCKER_COMPOSE} -f ${DOCKER_ENVIRONMENT} down -v
 
 # target: clean-volumes - Stop the project and clean all volumes
 clean-volumes:
@@ -40,6 +40,15 @@ clean-volumes:
 # target: logs - Show project logs
 logs:
 	${DOCKER_COMPOSE} -f ${DOCKER_ENVIRONMENT} logs -f
+
+# target: enter postgres shell
+.PHONY: postgres
+postgres:
+	${DOCKER_COMPOSE} exec web-db psql -U postgres
+
+.PHONY: build-schema
+build-schema:
+	${DOCKER_COMPOSE} exec web python app/db.py
 
 # target: test - test code
 .PHONY: test-web
