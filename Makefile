@@ -42,9 +42,9 @@ logs:
 	${DOCKER_COMPOSE} -f ${DOCKER_ENVIRONMENT} logs -f
 
 # target: test - test code
-.PHONY: test
-test:
-	${PRE_RUN_API_COMMAND} test
+.PHONY: test-web
+test-web:
+	${DOCKER_COMPOSE} exec web python -m pytest
 
 # target: lint - Lint the code
 .PHONY: lint
