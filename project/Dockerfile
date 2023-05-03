@@ -18,6 +18,10 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
+# install python dependencies for dev environment
+COPY ./requirements-dev.txt .
+RUN pip install -r requirements-dev.txt
+
 # add app
 COPY . .
 
