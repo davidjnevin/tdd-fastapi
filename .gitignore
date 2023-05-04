@@ -160,5 +160,5 @@ cython_debug/
 #.idea/
 
 # Coverage
-.coveragerc
+.coverage
 htmlcov/
