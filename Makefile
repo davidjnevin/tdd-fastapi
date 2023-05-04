@@ -5,6 +5,7 @@ PACKAGE_NAME=app
 VENV_FOLDER=venv
 LAUNCH_IN_VENV=source ${VENV_FOLDER}/bin/activate &&
 PYTHON_VERSION=python3.11
+WEB_DOCKER_NAME=web
 
 # target: all - Default target. Does nothing.
 all:
@@ -25,8 +26,8 @@ setup:
 build:
 	${DOCKER_COMPOSE} -f ${DOCKER_ENVIRONMENT} build
 
-# target: run - Run the project
-run:
+# target: up - Run the project
+up:
 	${DOCKER_COMPOSE} -f ${DOCKER_ENVIRONMENT} up -d
 
 # taget: down - Stop the project
@@ -48,24 +49,49 @@ postgres:
 
 .PHONY: build-schema
 build-schema:
-	${DOCKER_COMPOSE} exec web python app/db.py
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} python app/db.py
+
+# target: flake8 - check code
+.PHONY: flake8
+flake8:
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} flake8 .
+
+# target: black - check code
+.PHONY: black-diff
+black-diff:
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} black . --diff
+
+# target: black - check code
+.PHONY: black-check
+black-check:
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} black . --check
+
+# target: black - check code
+.PHONY: black
+black:
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} black .
+
+.PHONY: isort
+isort:
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} isort .
 
 # target: test - test code
 .PHONY: test-web
 test-web:
-	${DOCKER_COMPOSE} exec web python -m pytest
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} python -m pytest
 
 # target: lint - Lint the code
 .PHONY: lint
 lint:
 	${PRE_RUN_API_COMMAND} lint
 
-# target: apply_black_isort - Run black and isort
-apply_black_isort:
-	${LAUNCH_IN_VENV} black ${PACKAGE_NAME} tests
-	${LAUNCH_IN_VENV} isort ${PACKAGE_NAME} tests
+# target: check code flake8, black, isort --check-only
+check-code:
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} flake8 .
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} black . --check
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} isort . --check-only
 
 # target: Initalize using aerich
 .PHONY: aerich-init-db
 aerich-init-db:
-	${DOCKER_COMPOSE} exec web aerich init-db
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} aerich init-db
