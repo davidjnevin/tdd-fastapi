@@ -1,5 +1,6 @@
 from tortoise.backends.base.client import BaseDBAsyncClient
 
+
 async def upgrade(db: BaseDBAsyncClient) -> str:
     return """
         CREATE TABLE IF NOT EXISTS "textsummary" (
