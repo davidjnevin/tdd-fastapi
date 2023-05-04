@@ -26,3 +26,8 @@ async def read_summary(id: int) -> SummarySchema:
     summary = await crud.get(id)
 
     return summary
+
+
+@router.get("/", response_model=list[SummarySchema])
+async def read_all_summaries() -> list[SummarySchema]:
+    return await crud.get_all()

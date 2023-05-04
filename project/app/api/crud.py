@@ -18,3 +18,8 @@ async def get(id: int) -> Union[dict, None]:
     if not summary:
         raise HTTPException(status_code=404, detail="Summary not found")
     return summary
+
+
+async def get_all() -> list:
+    summaries = await TextSummary.all().values()
+    return summaries
