@@ -1,6 +1,7 @@
 # pull official base image
-FROM python:3.11.2-slim-buster
+FROM python:3-slim-bullseye
 
+LABEL org.opencontainers.image.source=https://github.com/davidjnevin/fastapi-tdd-docker/
 # set working directory
 WORKDIR /usr/src/app
 
@@ -31,3 +32,4 @@ RUN chmod +x /usr/src/app/entrypoint.sh
 
 # run entrypoint.sh
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+
