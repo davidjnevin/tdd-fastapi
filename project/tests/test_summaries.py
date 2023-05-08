@@ -6,9 +6,7 @@ def test_create_summary(test_app_with_db):
     # test_app_with_db
 
     # When
-    response = test_app_with_db.post(
-        "/summaries/", data=json.dumps({"url": "https://foo.bar"})
-    )
+    response = test_app_with_db.post("/summaries/", data=json.dumps({"url": "https://foo.bar"}))
 
     # Then
     assert response.status_code == 201
@@ -30,9 +28,7 @@ def test_create_summaries_invalid_json(test_app):
 
 
 def test_read_summary(test_app_with_db):
-    response = test_app_with_db.post(
-        "/summaries/", data=json.dumps({"url": "https://foo.bar"})
-    )
+    response = test_app_with_db.post("/summaries/", data=json.dumps({"url": "https://foo.bar"}))
     summary_id = response.json()["id"]
 
     response = test_app_with_db.get(f"/summaries/{summary_id}/")
@@ -52,9 +48,7 @@ def test_read_summary_incorrect_id(test_app_with_db):
 
 
 def test_read_all_summaries(test_app_with_db):
-    response = test_app_with_db.post(
-        "/summaries/", data=json.dumps({"url": "https://foo.bar"})
-    )
+    response = test_app_with_db.post("/summaries/", data=json.dumps({"url": "https://foo.bar"}))
     summary_id = response.json()["id"]
 
     response = test_app_with_db.get("/summaries/")
@@ -62,3 +56,21 @@ def test_read_all_summaries(test_app_with_db):
 
     response_list = response.json()
     assert len(list(filter(lambda d: d["id"] == summary_id, response_list))) == 1
+
+
+def test_remove_summary(test_app_with_db):
+    response = test_app_with_db.post(
+        "/summaries/",
+        data=json.dumps({"url": "https://foo.bar"}),
+    )
+    summary_id = response.json()["id"]
+
+    response = test_app_with_db.delete(f"/summaries/{summary_id}")
+    assert response.status_code == 200
+    assert response.json() == {"id": summary_id, "url": "https://foo.bar"}
+
+
+def test_remove_summary_incorrect_id(test_app_with_db):
+    response = test_app_with_db.delete(f"/summaries/999")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Summary not found"
