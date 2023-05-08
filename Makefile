@@ -83,7 +83,8 @@ test-web:
 # target: lint - Lint the code
 .PHONY: lint
 lint:
-	${PRE_RUN_API_COMMAND} lint
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} black .
+	${DOCKER_COMPOSE} exec ${WEB_DOCKER_NAME} isort .
 
 # target: check code flake8, black, isort --check-only
 check-code:
