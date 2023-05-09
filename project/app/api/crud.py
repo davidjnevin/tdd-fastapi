@@ -7,14 +7,7 @@ from app.models.tortoise import TextSummary
 
 
 async def post(payload: SummaryPayloadSchema) -> int:
-<<<<<<< HEAD
-    summary = TextSummary(
-        url=payload.url,
-        summary="dummy summary",
-    )
-=======
     summary = TextSummary(url=payload.url, summary="")
->>>>>>> Fix/BackgroundTask
     await summary.save()
     return summary.id
 
