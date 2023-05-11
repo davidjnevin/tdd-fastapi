@@ -1,7 +1,6 @@
 # pull official base image
 FROM python:3-slim-bullseye
 
-LABEL org.opencontainers.image.source=https://github.com/davidjnevin/fastapi-tdd-docker/
 # set working directory
 WORKDIR /usr/src/app
 
@@ -17,9 +16,6 @@ RUN apt-get update \
 # install python dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
-RUN pip install -r requirements.txt
-
-# install python dependencies for dev environment
 COPY ./requirements-dev.txt .
 RUN pip install -r requirements-dev.txt
 
