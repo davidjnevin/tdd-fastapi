@@ -1,7 +1,6 @@
 # pull official base image
-FROM python:3-slim-bullseye
+FROM python:3.11.2-slim-buster
 
-LABEL org.opencontainers.image.source=https://github.com/davidjnevin/fastapi-tdd-docker/
 # set working directory
 WORKDIR /usr/src/app
 
