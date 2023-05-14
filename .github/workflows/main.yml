@@ -1,4 +1,4 @@
-name: Continuous Integration and Delivery
+name: Continuous Integration
 
 on: [push]
 
@@ -58,6 +58,7 @@ jobs:
             "./project"
       - name: Run container
         run: |
+          docker container ls
           docker run \
             -d \
             --name fastapi-tdd \
